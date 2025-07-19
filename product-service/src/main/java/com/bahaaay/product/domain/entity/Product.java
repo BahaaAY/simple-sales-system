@@ -23,6 +23,7 @@ public class Product {
         this.category = category;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        validate(); // Validate the product fields upon creation or loading
     }
 
     /** * Factory method to create a new Product instance.
@@ -50,6 +51,39 @@ public class Product {
      */
     public static Product load(UUID id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
         return new Product(id, name, description, category, createdAt, updatedAt);
+    }
+
+    /** Validation */
+
+    public void validate() {
+        validateId();
+        validateName();
+        validateDescription();
+        validateCategory();
+    }
+
+    private void validateId() {
+        if (id == null) {
+            throw new IllegalArgumentException("Product ID cannot be null");
+        }
+    }
+
+    private void validateName() {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be null or empty");
+        }
+    }
+
+    private void validateDescription() {
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Product description cannot be null or empty");
+        }
+    }
+
+    private void validateCategory() {
+        if (category == null || category.isBlank()) {
+            throw new IllegalArgumentException("Product category cannot be null or empty");
+        }
     }
 
 

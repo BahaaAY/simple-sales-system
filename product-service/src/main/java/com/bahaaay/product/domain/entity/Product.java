@@ -28,15 +28,14 @@ public class Product {
 
     /** * Factory method to create a new Product instance.
      *
-     * @param id          Unique identifier for the product.
      * @param name        Name of the product.
      * @param description Description of the product.
      * @param category    Category of the product.
      * @return A new Product instance with the current timestamp for createdAt and updatedAt.
      */
-    public static Product create(UUID id, String name, String description, String category) {
+    public static Product create(String name, String description, String category) {
         Instant now = Instant.now();
-        return new Product(id, name, description, category, now, now);
+        return new Product(UUID.randomUUID(), name, description, category, now, now);
     }
 
     /** Factory method to load an existing Product instance.

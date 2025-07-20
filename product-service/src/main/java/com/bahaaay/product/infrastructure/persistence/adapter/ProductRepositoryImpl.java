@@ -1,5 +1,6 @@
 package com.bahaaay.product.infrastructure.persistence.adapter;
 
+import com.bahaaay.common.domain.valueobject.ProductId;
 import com.bahaaay.product.domain.entity.Product;
 import com.bahaaay.product.domain.repository.ProductRepository;
 import com.bahaaay.product.infrastructure.persistence.mapper.product.ProductPersistenceMapper;
@@ -18,5 +19,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Product save(Product product) {
         return productPersistenceMapper.productJpaEntityToProduct(productJpaRepository.save(productPersistenceMapper.productToProductJpaEntity(product)));
+    }
+
+    @Override
+    public Product findById(ProductId id) {
+        return productPersistenceMapper.productJpaEntityToProduct(productJpaRepository.getReferenceById(id.getValue()));
     }
 }

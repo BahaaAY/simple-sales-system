@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
@@ -22,6 +24,12 @@ public class ProductController {
     public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
         ProductDTO productDTO = productApplicationService.createProduct(createProductRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable("id") UUID id) {
+        ProductDTO productDTO = productApplicationService.getProductById(id);
+        return ResponseEntity.ok(productDTO);
     }
 
 }

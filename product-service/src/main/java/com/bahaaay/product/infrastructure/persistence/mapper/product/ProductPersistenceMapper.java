@@ -1,5 +1,6 @@
 package com.bahaaay.product.infrastructure.persistence.mapper.product;
 
+import com.bahaaay.common.domain.valueobject.ProductId;
 import com.bahaaay.product.domain.entity.Product;
 import com.bahaaay.product.infrastructure.persistence.entity.product.ProductJpaEntity;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ public class ProductPersistenceMapper {
             Product product
     ) {
         return  ProductJpaEntity.builder()
-                .id(product.getId())
+                .id(product.getId().getValue())
                 .name(product.getName())
                 .description(product.getDescription())
                 .category(product.getCategory())
@@ -24,7 +25,7 @@ public class ProductPersistenceMapper {
             ProductJpaEntity productJpaEntity
     ) {
         return Product.load(
-                productJpaEntity.getId(),
+                ProductId.from(productJpaEntity.getId()),
                 productJpaEntity.getName(),
                 productJpaEntity.getDescription(),
                 productJpaEntity.getCategory(),

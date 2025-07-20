@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface ProductRepository {
     Product save(Product product);
+
 }

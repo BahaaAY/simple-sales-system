@@ -1,5 +1,7 @@
 package com.bahaaay.product.domain.entity;
 
+import com.bahaaay.common.domain.valueobject.ProductId;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -8,7 +10,7 @@ import java.util.UUID;
  */
 
 public class Product {
-    private UUID id;
+    private ProductId id;
     private String name;
     private String description;
     private String category;
@@ -16,7 +18,7 @@ public class Product {
     private Instant createdAt;
     private Instant updatedAt;
 
-    private Product(UUID id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
+    private Product(ProductId id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -35,7 +37,7 @@ public class Product {
      */
     public static Product create(String name, String description, String category) {
         Instant now = Instant.now();
-        return new Product(UUID.randomUUID(), name, description, category, now, now);
+        return new Product(ProductId.generate(), name, description, category, now, now);
     }
 
     /** Factory method to load an existing Product instance.
@@ -48,7 +50,7 @@ public class Product {
      * @param updatedAt   Last updated timestamp of the product.
      * @return A new Product instance with the provided parameters.
      */
-    public static Product load(UUID id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
+    public static Product load(ProductId id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
         return new Product(id, name, description, category, createdAt, updatedAt);
     }
 
@@ -88,7 +90,7 @@ public class Product {
 
     /** Getters */
 
-    public UUID getId() {
+    public ProductId getId() {
         return id;
     }
 

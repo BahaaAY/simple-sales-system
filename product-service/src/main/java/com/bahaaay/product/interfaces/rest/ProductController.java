@@ -3,6 +3,7 @@ package com.bahaaay.product.interfaces.rest;
 import com.bahaaay.product.application.ProductApplicationService;
 import com.bahaaay.product.application.dto.product.ProductDTO;
 import com.bahaaay.product.application.dto.product.CreateProductRequest;
+import com.bahaaay.product.application.dto.product.UpdateProductRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable("id") UUID id) {
         ProductDTO productDTO = productApplicationService.getProductById(id);
+        return ResponseEntity.ok(productDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("id") UUID id, @Valid @RequestBody UpdateProductRequest updateProductRequest) {
+        ProductDTO productDTO = productApplicationService.updateProduct(id, updateProductRequest);
         return ResponseEntity.ok(productDTO);
     }
 

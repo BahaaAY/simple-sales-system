@@ -87,6 +87,30 @@ public class Product {
         }
     }
 
+    public void updateName(String name) {
+        if (name != null && !name.isBlank()) {
+            this.name = name;
+            this.updatedAt = Instant.now();
+            validateName();
+        }
+    }
+
+    public void updateDescription(String description) {
+        if (description != null && !description.isBlank()) {
+            this.description = description;
+            this.updatedAt = Instant.now();
+            validateDescription();
+        }
+    }
+
+    public void updateCategory(String category) {
+        if (category != null && !category.isBlank()) {
+            this.category = category;
+            this.updatedAt = Instant.now();
+            validateCategory();
+        }
+    }
+
 
     /** Getters */
 

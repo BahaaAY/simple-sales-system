@@ -7,6 +7,8 @@ import com.bahaaay.product.infrastructure.persistence.mapper.product.ProductPers
 import com.bahaaay.product.infrastructure.persistence.repository.product.ProductJpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
     private final ProductJpaRepository productJpaRepository;
@@ -22,7 +24,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product findById(ProductId id) {
-        return productPersistenceMapper.productJpaEntityToProduct(productJpaRepository.getReferenceById(id.getValue()));
+    public Optional<Product> findById(ProductId id) {
+        return productJpaRepository.findById(id.getValue())
+                .map(productPersistenceMapper::productJpaEntityToProduct);
     }
 }

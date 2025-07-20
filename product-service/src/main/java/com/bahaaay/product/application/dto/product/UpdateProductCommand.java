@@ -1,6 +1,6 @@
 package com.bahaaay.product.application.dto.product;
 
-import com.bahaaay.common.domain.valueobject.ProductId;
+import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 
 public record UpdateProductCommand(
         ProductId productId,

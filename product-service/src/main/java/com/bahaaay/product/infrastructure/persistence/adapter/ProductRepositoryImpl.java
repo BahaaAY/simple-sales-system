@@ -1,6 +1,6 @@
 package com.bahaaay.product.infrastructure.persistence.adapter;
 
-import com.bahaaay.common.domain.valueobject.ProductId;
+import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 import com.bahaaay.product.domain.entity.Product;
 import com.bahaaay.product.domain.repository.ProductRepository;
 import com.bahaaay.product.infrastructure.persistence.mapper.product.ProductPersistenceMapper;

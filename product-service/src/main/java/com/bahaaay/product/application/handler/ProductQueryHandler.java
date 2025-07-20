@@ -1,6 +1,6 @@
 package com.bahaaay.product.application.handler;
 
-import com.bahaaay.common.domain.valueobject.ProductId;
+import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 import com.bahaaay.product.application.dto.product.ProductDTO;
 import com.bahaaay.product.application.mapper.ProductDataMapper;
 import com.bahaaay.product.domain.entity.Product;

@@ -1,9 +1,8 @@
 package com.bahaaay.product.domain.entity;
 
-import com.bahaaay.common.domain.valueobject.ProductId;
+import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 
 import java.time.Instant;
-import java.util.UUID;
 
 /** Product Aggregate Root Entity.
  * This class is immutable and provides factory methods for creating new instances or loading existing ones.

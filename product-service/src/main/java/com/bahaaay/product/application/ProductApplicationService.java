@@ -38,7 +38,8 @@ public class ProductApplicationService {
                         ProductId.from(id),
                         updateProductRequest.name(),
                         updateProductRequest.description(),
-                        updateProductRequest.category()
+                        updateProductRequest.category(),
+                        updateProductRequest.price()
                 )
         );
     }

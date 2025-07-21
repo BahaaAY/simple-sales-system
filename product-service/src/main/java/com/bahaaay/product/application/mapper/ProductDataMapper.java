@@ -11,7 +11,7 @@ public class ProductDataMapper {
     public Product createProductRequestToProduct(
             CreateProductRequest createProductRequest
     ) {
-        return Product.create(createProductRequest.name(), createProductRequest.description(), createProductRequest.category());
+        return Product.create(createProductRequest.name(), createProductRequest.description(), createProductRequest.category(), createProductRequest.price());
     }
 
 
@@ -21,6 +21,7 @@ public class ProductDataMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getCategory(),
+                product.getPrice(),
                 product.getCreatedAt(),
                 product.getUpdatedAt()
         );

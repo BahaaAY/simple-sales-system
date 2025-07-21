@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-price-to-product-table
+      author: BahaaAY
+      changes:
+        - addColumn:
+            tableName: product
+            columns:
+              - column:
+                  name: price
+                  type: DECIMAL(10, 3)
+                  constraints:
+                    nullable: false
+                  defaultValue: 0.00

@@ -41,6 +41,7 @@ public class ProductCommandHandler {
         product.updateName(updateProductCommand.name());
         product.updateDescription(updateProductCommand.description());
         product.updateCategory(updateProductCommand.category());
+        product.updatePrice(updateProductCommand.price());
 
         product = productRepository.save(product);
 

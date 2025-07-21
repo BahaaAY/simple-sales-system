@@ -29,6 +29,7 @@ public class ProductPersistenceMapper {
                 productJpaEntity.getName(),
                 productJpaEntity.getDescription(),
                 productJpaEntity.getCategory(),
+                productJpaEntity.getPrice(),
                 productJpaEntity.getCreatedAt(),
                 productJpaEntity.getUpdatedAt()
         );

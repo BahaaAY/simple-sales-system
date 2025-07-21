@@ -2,6 +2,7 @@ package com.bahaaay.product.domain.entity;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 /** Product Aggregate Root Entity.
@@ -14,14 +15,17 @@ public class Product {
     private String description;
     private String category;
 
+    private BigDecimal price;
+
     private Instant createdAt;
     private Instant updatedAt;
 
-    private Product(ProductId id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
+    private Product(ProductId id, String name, String description, String category, BigDecimal price, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.category = category;
+        this.price = price;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         validate(); // Validate the product fields upon creation or loading
@@ -34,9 +38,9 @@ public class Product {
      * @param category    Category of the product.
      * @return A new Product instance with the current timestamp for createdAt and updatedAt.
      */
-    public static Product create(String name, String description, String category) {
+    public static Product create(String name, String description, String category, BigDecimal price) {
         Instant now = Instant.now();
-        return new Product(ProductId.generate(), name, description, category, now, now);
+        return new Product(ProductId.generate(), name, description, category, price, now, now);
     }
 
     /** Factory method to load an existing Product instance.
@@ -49,8 +53,8 @@ public class Product {
      * @param updatedAt   Last updated timestamp of the product.
      * @return A new Product instance with the provided parameters.
      */
-    public static Product load(ProductId id, String name, String description, String category, Instant createdAt, Instant updatedAt) {
-        return new Product(id, name, description, category, createdAt, updatedAt);
+    public static Product load(ProductId id, String name, String description, String category, BigDecimal price, Instant createdAt, Instant updatedAt) {
+        return new Product(id, name, description, category, price, createdAt, updatedAt);
     }
 
     /** Validation */
@@ -60,6 +64,7 @@ public class Product {
         validateName();
         validateDescription();
         validateCategory();
+        validatePrice();
     }
 
     private void validateId() {
@@ -83,6 +88,12 @@ public class Product {
     private void validateCategory() {
         if (category == null || category.isBlank()) {
             throw new IllegalArgumentException("Product category cannot be null or empty");
+        }
+    }
+
+    private void validatePrice() {
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Product price cannot be null or negative");
         }
     }
 
@@ -110,6 +121,14 @@ public class Product {
         }
     }
 
+    public void updatePrice(BigDecimal price) {
+        if (price != null && price.compareTo(BigDecimal.ZERO) >= 0) {
+            this.price = price;
+            this.updatedAt = Instant.now();
+            validatePrice();
+        }
+    }
+
 
     /** Getters */
 
@@ -127,6 +146,10 @@ public class Product {
 
     public String getCategory() {
         return category;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public Instant getCreatedAt() {
@@ -157,6 +180,7 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
+                ", price=" + price +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

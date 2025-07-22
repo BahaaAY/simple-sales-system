@@ -16,6 +16,7 @@ public class ProductPersistenceMapper {
                 .name(product.getName())
                 .description(product.getDescription())
                 .category(product.getCategory())
+                .price(product.getPrice())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .build();

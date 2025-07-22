@@ -12,6 +12,7 @@
         <module>product-service</module>
         <module>common</module>
         <module>client-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>

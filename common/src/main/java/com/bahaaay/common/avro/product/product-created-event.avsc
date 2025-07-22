@@ -1,0 +1,49 @@
+{
+  "type": "record",
+  "name": "ProductCreatedEvent",
+  "namespace": "com.bahaaay.common.avro.product",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "category",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": {
+        "type": "bytes",
+        "logicalType": "decimal",
+        "precision": 12,
+        "scale": 2
+      }
+    },
+    {
+      "name": "createdAt",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "updatedAt",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}

@@ -13,6 +13,7 @@
         <module>common</module>
         <module>client-service</module>
         <module>api-gateway</module>
+        <module>sales-service</module>
     </modules>
 
     <properties>

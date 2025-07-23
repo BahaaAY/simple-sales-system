@@ -6,6 +6,7 @@ import com.bahaaay.client.application.dto.client.UpdateClientCommand;
 import com.bahaaay.client.application.mapper.ClientDataMapper;
 import com.bahaaay.client.domain.entity.Client;
 import com.bahaaay.client.domain.repository.ClientRepository;
+import com.bahaaay.client.interfaces.messaging.publisher.ClientEventPublisher;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,12 @@ public class ClientCommandHandler {
 
     private final ClientRepository clientRepository;
     private final ClientDataMapper clientDataMapper;
+    private final ClientEventPublisher clientEventPublisher;
 
-    public ClientCommandHandler(ClientRepository clientRepository, ClientDataMapper clientDataMapper) {
+    public ClientCommandHandler(ClientRepository clientRepository, ClientDataMapper clientDataMapper, ClientEventPublisher clientEventPublisher) {
         this.clientRepository = clientRepository;
         this.clientDataMapper = clientDataMapper;
+        this.clientEventPublisher = clientEventPublisher;
     }
 
     public ClientDTO handleCreate(
@@ -28,7 +31,7 @@ public class ClientCommandHandler {
 
         Client savedClient = clientRepository.save(client);
 
-        // TODO publish client created event
+        clientEventPublisher.publishCreated(client);
 
         return clientDataMapper.clientToClientDTO(savedClient);
 
@@ -48,7 +51,7 @@ public class ClientCommandHandler {
 
         Client updatedClient = clientRepository.save(client);
 
-        // TODO publish client updated event
+        clientEventPublisher.publishUpdated(updatedClient);
 
         return clientDataMapper.clientToClientDTO(updatedClient);
     }

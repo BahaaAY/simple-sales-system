@@ -11,12 +11,13 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Configuration
 public class KafkaProducerConfig {
 
     @Bean
-    public ProducerFactory<String, Object> avroProducerFactory(KafkaProperties props) {
+    public ProducerFactory<UUID, Object> avroProducerFactory(KafkaProperties props) {
         Map<String,Object> cfg = props.buildProducerProperties();
         cfg.put(
                 AbstractKafkaSchemaSerDeConfig.VALUE_SUBJECT_NAME_STRATEGY,
@@ -26,8 +27,8 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String,Object> avroKafkaTemplate(
-            ProducerFactory<String,Object> factory) {
+    public KafkaTemplate<UUID,Object> avroKafkaTemplate(
+            ProducerFactory<UUID,Object> factory) {
         return new KafkaTemplate<>(factory);
     }
 }

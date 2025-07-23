@@ -9,21 +9,23 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class ProductEventPublisher {
 
-    private final KafkaTemplate<String,Object> template;
+    private final KafkaTemplate<UUID,Object> template;
     private final AvroProductMapper mapper;
 
     private static final String TOPIC = "product-events.v1";
 
     public void publishCreated(Product p) {
-        template.send(TOPIC, p.getId().toString(), mapper.productToProductCreatedEvent(p));
+        template.send(TOPIC, p.getId().getValue(), mapper.productToProductCreatedEvent(p));
     }
 
     public void publishUpdated(Product p) {
-        template.send(TOPIC, p.getId().toString(), mapper.productToProductUpdatedEvent(p));
+        template.send(TOPIC, p.getId().getValue(), mapper.productToProductUpdatedEvent(p));
     }
 
 }

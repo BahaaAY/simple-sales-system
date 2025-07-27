@@ -4,6 +4,7 @@ import com.bahaaay.client.application.dto.client.ClientDTO;
 import com.bahaaay.client.application.mapper.ClientDataMapper;
 import com.bahaaay.client.domain.repository.ClientRepository;
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
+import com.bahaaay.common.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,6 @@ public class ClientQueryHandler {
     public ClientDTO handleGetById(UUID clientId) {
         return clientRepository.findById(ClientId.from(clientId))
                 .map(clientDataMapper::clientToClientDTO)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + clientId));
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + clientId));
     }
 }

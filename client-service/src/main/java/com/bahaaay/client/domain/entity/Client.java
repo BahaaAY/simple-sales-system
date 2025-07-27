@@ -1,6 +1,7 @@
 package com.bahaaay.client.domain.entity;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
+import com.bahaaay.common.exception.BadRequestException;
 
 import java.time.Instant;
 
@@ -58,25 +59,25 @@ public class Client {
 
     private void validateId() {
         if (id == null) {
-            throw new IllegalArgumentException("Client ID cannot be null");
+            throw new BadRequestException("Client ID cannot be null");
         }
     }
 
     private void validateName() {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Client name cannot be null or empty");
+            throw new BadRequestException("Client name cannot be null or empty");
         }
     }
 
     private void validateLastName() {
         if (lastName == null || lastName.isBlank()) {
-            throw new IllegalArgumentException("Client last name cannot be null or empty");
+            throw new BadRequestException("Client last name cannot be null or empty");
         }
     }
 
     private void validateMobileNumber() {
         if (mobileNumber == null || mobileNumber.isBlank()) {
-            throw new IllegalArgumentException("Mobile number cannot be null or empty");
+            throw new BadRequestException("Mobile number cannot be null or empty");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.bahaaay.product.application.handler;
 
+import com.bahaaay.common.exception.ResourceNotFoundException;
 import com.bahaaay.product.application.dto.product.CreateProductRequest;
 import com.bahaaay.product.application.dto.product.ProductDTO;
 import com.bahaaay.product.application.dto.product.UpdateProductCommand;
@@ -7,7 +8,6 @@ import com.bahaaay.product.application.mapper.ProductDataMapper;
 import com.bahaaay.product.domain.entity.Product;
 import com.bahaaay.product.domain.repository.ProductRepository;
 import com.bahaaay.product.interfaces.messaging.publisher.ProductEventPublisher;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +46,7 @@ public class ProductCommandHandler {
     public ProductDTO handleUpdate(UpdateProductCommand updateProductCommand) {
         // Retrieve the product by ID
         Product product = productRepository.findById(updateProductCommand.productId()).orElseThrow(
-                () -> new EntityNotFoundException("Product not found with id: " + updateProductCommand.productId())
+                () -> new ResourceNotFoundException("Product not found with id: " + updateProductCommand.productId())
         );
 
         // Update product details

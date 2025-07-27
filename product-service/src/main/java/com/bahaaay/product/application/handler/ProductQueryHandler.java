@@ -1,11 +1,11 @@
 package com.bahaaay.product.application.handler;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
+import com.bahaaay.common.exception.ResourceNotFoundException;
 import com.bahaaay.product.application.dto.product.ProductDTO;
 import com.bahaaay.product.application.mapper.ProductDataMapper;
 import com.bahaaay.product.domain.entity.Product;
 import com.bahaaay.product.domain.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +31,7 @@ public class ProductQueryHandler {
     public ProductDTO handleGetById(UUID id) {
 
         Product product = productRepository.findById(ProductId.from(id))
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
         // Convert the Product entity to ProductDTO using the mapper
         return productDataMapper.productToProductDTO(product);
     }

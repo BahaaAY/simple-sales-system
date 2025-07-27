@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.bahaaay.client")
+@ComponentScan(basePackages = {"com.bahaaay.client", "com.bahaaay.common.exception"})
 @EntityScan(basePackages = "com.bahaaay.client.infrastructure.persistence.entity")
 @EnableJpaRepositories(basePackages = "com.bahaaay.client.infrastructure.persistence.repository")
 public class ClientServiceApplication {

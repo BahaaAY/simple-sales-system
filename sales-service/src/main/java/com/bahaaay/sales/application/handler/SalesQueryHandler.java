@@ -3,13 +3,14 @@ package com.bahaaay.sales.application.handler;
 import com.bahaaay.common.application.dto.PagedResult;
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
+import com.bahaaay.common.exception.BadRequestException;
+import com.bahaaay.common.exception.ResourceNotFoundException;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.mapper.SalesDataMapper;
 import com.bahaaay.sales.domain.entity.sales.Sale;
 import com.bahaaay.sales.domain.entity.sales.SaleTransactionUpdateLog;
 import com.bahaaay.sales.domain.repository.SaleTransactionUpdateLogRepository;
 import com.bahaaay.sales.domain.repository.SalesRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class SalesQueryHandler {
     public SaleDTO handleGetById(SaleId from) {
         return salesDataMapper.saleToSaleDTO(
                 salesRepository.findById(from)
-                        .orElseThrow(() -> new EntityNotFoundException("Sale not found with id: " + from))
+                        .orElseThrow(() -> new ResourceNotFoundException("Sale not found with id: " + from))
         );
     }
 
@@ -62,10 +63,10 @@ public class SalesQueryHandler {
     @Transactional(readOnly = true)
     public List<SaleTransactionUpdateLog> handleFetchLogsBySaleId(SaleId saleId) {
         if (saleId == null) {
-            throw new IllegalArgumentException("Sale ID cannot be null");
+            throw new BadRequestException("Sale ID cannot be null");
         }
         if (!salesRepository.existsById(saleId)) {
-            throw new EntityNotFoundException("Sale not found with id: " + saleId);
+            throw new ResourceNotFoundException("Sale not found with id: " + saleId);
         }
         return saleTransactionUpdateLogRepository.findBySaleId(saleId);
     }

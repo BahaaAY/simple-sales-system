@@ -1,6 +1,7 @@
 package com.bahaaay.product.domain.entity;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
+import com.bahaaay.common.exception.BadRequestException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -69,31 +70,31 @@ public class Product {
 
     private void validateId() {
         if (id == null) {
-            throw new IllegalArgumentException("Product ID cannot be null");
+            throw new BadRequestException("Product ID cannot be null");
         }
     }
 
     private void validateName() {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Product name cannot be null or empty");
+            throw new BadRequestException("Product name cannot be null or empty");
         }
     }
 
     private void validateDescription() {
         if (description == null || description.isBlank()) {
-            throw new IllegalArgumentException("Product description cannot be null or empty");
+            throw new BadRequestException("Product description cannot be null or empty");
         }
     }
 
     private void validateCategory() {
         if (category == null || category.isBlank()) {
-            throw new IllegalArgumentException("Product category cannot be null or empty");
+            throw new BadRequestException("Product category cannot be null or empty");
         }
     }
 
     private void validatePrice() {
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Product price cannot be null or negative");
+            throw new BadRequestException("Product price cannot be null or negative");
         }
     }
 

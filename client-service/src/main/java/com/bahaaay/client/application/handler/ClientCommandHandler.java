@@ -7,7 +7,7 @@ import com.bahaaay.client.application.mapper.ClientDataMapper;
 import com.bahaaay.client.domain.entity.Client;
 import com.bahaaay.client.domain.repository.ClientRepository;
 import com.bahaaay.client.interfaces.messaging.publisher.ClientEventPublisher;
-import jakarta.persistence.EntityNotFoundException;
+import com.bahaaay.common.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +42,7 @@ public class ClientCommandHandler {
     @Transactional
     public ClientDTO handleUpdate(UpdateClientCommand updateClientCommand) {
         Client client = clientRepository.findById(updateClientCommand.clientId())
-                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
 
         client.updateName(updateClientCommand.name());
 

@@ -1,5 +1,7 @@
 package com.bahaaay.common.domain.valueobject.identifiers;
 
+import com.bahaaay.common.exception.BadRequestException;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -7,7 +9,7 @@ public sealed abstract class BaseIdentifier implements Identifier permits Client
     private final UUID value;
 
     protected BaseIdentifier(UUID value) {
-        if (value == null) throw new IllegalArgumentException("ID cannot be null");
+        if (value == null) throw new BadRequestException("ID cannot be null");
         this.value = value;
     }
 

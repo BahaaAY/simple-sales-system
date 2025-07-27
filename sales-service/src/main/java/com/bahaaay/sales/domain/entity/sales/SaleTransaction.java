@@ -3,6 +3,7 @@ package com.bahaaay.sales.domain.entity.sales;
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleTransactionId;
+import com.bahaaay.common.exception.BadRequestException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -38,19 +39,19 @@ public class SaleTransaction {
     }
 
     private void validate() {
-        if (saleId == null) throw new IllegalArgumentException("saleId required");
-        if (productId == null) throw new IllegalArgumentException("productId required");
+        if (saleId == null) throw new BadRequestException("saleId required");
+        if (productId == null) throw new BadRequestException("productId required");
         if (productName == null
-                || productName.isBlank()) throw new IllegalArgumentException("productName required");
-        if (quantity < 0) throw new IllegalArgumentException("quantity ≥ 0");
+                || productName.isBlank()) throw new BadRequestException("productName required");
+        if (quantity < 0) throw new BadRequestException("quantity ≥ 0");
         if (price == null
                 || price.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("price ≥ 0");
+            throw new BadRequestException("price ≥ 0");
     }
 
     public void updateQuantity(int newQuantity) {
         if (newQuantity < 0) {
-            throw new IllegalArgumentException("quantity must be ≥ 0");
+            throw new BadRequestException("quantity must be ≥ 0");
         }
         this.quantity = newQuantity;
         this.updatedAt = Instant.now();

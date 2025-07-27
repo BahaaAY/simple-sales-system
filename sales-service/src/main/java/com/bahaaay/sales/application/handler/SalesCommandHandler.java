@@ -3,6 +3,7 @@ package com.bahaaay.sales.application.handler;
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleTransactionId;
+import com.bahaaay.common.exception.ResourceNotFoundException;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.dto.create.CreateSaleRequest;
 import com.bahaaay.sales.application.dto.update.UpdateSaleTransactionRequest;
@@ -17,7 +18,6 @@ import com.bahaaay.sales.domain.repository.ClientRefRepository;
 import com.bahaaay.sales.domain.repository.ProductRefRepository;
 import com.bahaaay.sales.domain.repository.SaleTransactionUpdateLogRepository;
 import com.bahaaay.sales.domain.repository.SalesRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,14 +67,14 @@ public class SalesCommandHandler {
                     .map(ProductId::getValue)
                     .filter(id -> !foundIds.contains(ProductId.from(id)))
                     .toList();
-            throw new EntityNotFoundException(
+            throw new ResourceNotFoundException(
                     "Product(s) not found: " + missing
             );
         }
 
         // check if client exists
         ClientRef client = clientRefRepository.findById(ClientId.from(request.clientId()))
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Client not found: " + request.clientId()
                 ));
 
@@ -95,7 +95,7 @@ public class SalesCommandHandler {
         request.transactions().forEach(txReq -> {
             ProductRef ref = byUuid.get(txReq.productId());
             if (ref == null) {
-                throw new EntityNotFoundException("Product not found: " + txReq.productId());
+                throw new ResourceNotFoundException("Product not found: " + txReq.productId());
             }
             sale.addTransaction(ref, txReq.quantity());
         });
@@ -110,7 +110,7 @@ public class SalesCommandHandler {
     public SaleDTO handleUpdateSaleTransactions(UpdateSaleTransactionsCommand updateSaleTransactionsCommand) {
         Sale sale = salesRepository.findById(
                 updateSaleTransactionsCommand.saleId()
-        ).orElseThrow(() -> new EntityNotFoundException(
+        ).orElseThrow(() -> new ResourceNotFoundException(
                 "Sale not found: " + updateSaleTransactionsCommand.saleId()
         ));
         // Batch‐update all lines

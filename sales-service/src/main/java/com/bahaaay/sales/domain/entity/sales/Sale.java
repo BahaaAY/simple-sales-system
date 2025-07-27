@@ -3,6 +3,7 @@ package com.bahaaay.sales.domain.entity.sales;
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleTransactionId;
+import com.bahaaay.common.exception.BadRequestException;
 import com.bahaaay.sales.domain.dto.TransactionQuantityUpdate;
 import com.bahaaay.sales.domain.entity.product_ref.ProductRef;
 
@@ -59,8 +60,8 @@ public class Sale {
     }
 
     private void validate() {
-        if (clientId == null) throw new IllegalArgumentException("clientId required");
-        if (seller == null || seller.isBlank()) throw new IllegalArgumentException("seller required");
+        if (clientId == null) throw new BadRequestException("clientId required");
+        if (seller == null || seller.isBlank()) throw new BadRequestException("seller required");
     }
 
 
@@ -74,7 +75,7 @@ public class Sale {
         SaleTransaction transaction = transactions.stream()
                 .filter(t -> t.getId().equals(transactionId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
+                .orElseThrow(() -> new BadRequestException("Transaction not found"));
         int currentQuantity = transaction.getQuantity();
         transaction.updateQuantity(newQuantity);
         this.updatedAt = Instant.now();

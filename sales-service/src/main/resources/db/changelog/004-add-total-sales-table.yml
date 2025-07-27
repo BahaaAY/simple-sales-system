@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id : 004-add-total-sales-table
+      author: BahaaAY
+      changes:
+        - addColumn:
+            tableName: sale
+            columns:
+              - column:
+                  name: total
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: 0.00
+
+              # Populate the total column for existing rows
+        - sql:
+            splitStatements: false
+            sql: >
+              UPDATE sale s
+              SET total = (
+                SELECT COALESCE(SUM(st.price * st.quantity), 0)
+                FROM sale_transaction st
+                WHERE st.sale_id = s.id
+              )

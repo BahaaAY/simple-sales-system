@@ -3,6 +3,7 @@ package com.bahaaay.sales.infrastructure.persistence.entity.sales;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ public class SaleJpaEntity {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    @Column(name="total", nullable = false)
+    private BigDecimal total;
 
     @OneToMany(
             mappedBy = "sale",

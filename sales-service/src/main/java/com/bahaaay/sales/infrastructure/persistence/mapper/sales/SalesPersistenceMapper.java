@@ -54,6 +54,7 @@ public class SalesPersistenceMapper {
                 .transactions(sale.getTransactions().stream()
                         .map(this::saleTransactionToSaleTransactionJpaEntity)
                         .toList())
+                .total(sale.total())
                 .createdAt(sale.getCreatedAt())
                 .updatedAt(sale.getUpdatedAt())
                 .build();

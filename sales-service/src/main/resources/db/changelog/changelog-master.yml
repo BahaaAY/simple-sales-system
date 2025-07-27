@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/002-create-client-ref-table.yml
   - include:
       file: db/changelog/003-create-sales-tables.yml
+  - include:
+      file: db/changelog/004-add-total-sales-table.yml

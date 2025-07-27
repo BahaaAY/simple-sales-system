@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-transaction-update-log-table
+      author: BahaaAY
+      changes:
+        - createTable:
+            tableName: sale_transaction_update_log
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: transaction_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sale_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: old_quantity
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: new_quantity
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

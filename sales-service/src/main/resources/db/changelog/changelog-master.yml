@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/003-create-sales-tables.yml
   - include:
       file: db/changelog/004-add-total-sales-table.yml
+  - include:
+      file: db/changelog/005-create-transaction-update-log-table.yml

@@ -3,7 +3,7 @@ package com.bahaaay.common.domain.valueobject.identifiers;
 import java.util.Objects;
 import java.util.UUID;
 
-public sealed abstract class BaseIdentifier implements Identifier permits ProductId, ClientId, SaleId, SaleTransactionId {
+public sealed abstract class BaseIdentifier implements Identifier permits ClientId, ProductId, SaleId, SaleTransactionId, SaleTransactionQuantityUpdateLogId {
     private final UUID value;
 
     protected BaseIdentifier(UUID value) {

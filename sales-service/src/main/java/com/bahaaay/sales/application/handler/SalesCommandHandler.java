@@ -12,8 +12,10 @@ import com.bahaaay.sales.domain.dto.TransactionQuantityUpdate;
 import com.bahaaay.sales.domain.entity.client_ref.ClientRef;
 import com.bahaaay.sales.domain.entity.product_ref.ProductRef;
 import com.bahaaay.sales.domain.entity.sales.Sale;
+import com.bahaaay.sales.domain.entity.sales.SaleTransactionUpdateLog;
 import com.bahaaay.sales.domain.repository.ClientRefRepository;
 import com.bahaaay.sales.domain.repository.ProductRefRepository;
+import com.bahaaay.sales.domain.repository.SaleTransactionUpdateLogRepository;
 import com.bahaaay.sales.domain.repository.SalesRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -34,11 +36,14 @@ public class SalesCommandHandler {
     private final SalesRepository salesRepository;
     private final SalesDataMapper salesDataMapper;
 
-    public SalesCommandHandler(ProductRefRepository productRefRepository, ClientRefRepository clientRefRepository, SalesRepository salesRepository, SalesDataMapper salesDataMapper) {
+    private final SaleTransactionUpdateLogRepository saleTransactionUpdateLogRepository;
+
+    public SalesCommandHandler(ProductRefRepository productRefRepository, ClientRefRepository clientRefRepository, SalesRepository salesRepository, SalesDataMapper salesDataMapper, SaleTransactionUpdateLogRepository saleTransactionUpdateLogRepository) {
         this.productRefRepository = productRefRepository;
         this.clientRefRepository = clientRefRepository;
         this.salesRepository = salesRepository;
         this.salesDataMapper = salesDataMapper;
+        this.saleTransactionUpdateLogRepository = saleTransactionUpdateLogRepository;
     }
 
     @Transactional
@@ -115,7 +120,16 @@ public class SalesCommandHandler {
                     SaleTransactionId.from(txReq.transactionId()),
                     txReq.newQuantity()
             );
-            //TODO save log
+
+            // log the change
+            saleTransactionUpdateLogRepository.save(
+                    SaleTransactionUpdateLog.create(
+                            sale.getId(),
+                            change.transactionId(),
+                            change.oldQuantity(),
+                            change.newQuantity()
+                    )
+            );
         }
         // save the sale
         Sale savedSale = salesRepository.save(sale);

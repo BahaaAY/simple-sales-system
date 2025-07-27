@@ -18,6 +18,20 @@ spring:
       properties:
         schema.registry.url: ${SPRING_KAFKA_PROPERTIES_SCHEMA_REGISTRY_URL}
         auto.register.schemas: true
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.UUIDDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: ${SPRING_KAFKA_PROPERTIES_SCHEMA_REGISTRY_URL:http://localhost:8081}
+        specific.avro.reader: true
+        auto-offset-reset: earliest
+        enable-auto-commit: false # we’ll commit manually
+    listener:
+      ack-mode: manual
+      concurrency: 1
+    groups:
+        products: sales-service-product-consumer
+        clients: sales-service-client-consumer
   jpa:
     hibernate:
       ddl-auto: none #using Liquibase for schema management

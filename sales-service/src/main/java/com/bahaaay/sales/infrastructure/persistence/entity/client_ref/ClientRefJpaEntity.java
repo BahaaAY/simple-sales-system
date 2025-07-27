@@ -20,7 +20,7 @@ public class ClientRefJpaEntity {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(name = "mobile_number", nullable = false)

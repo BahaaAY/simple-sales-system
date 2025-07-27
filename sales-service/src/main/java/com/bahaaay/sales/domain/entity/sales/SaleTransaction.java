@@ -1,4 +1,4 @@
-package com.bahaaay.sales.domain.entity.sale;
+package com.bahaaay.sales.domain.entity.sales;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
@@ -70,5 +70,13 @@ public class SaleTransaction {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 }

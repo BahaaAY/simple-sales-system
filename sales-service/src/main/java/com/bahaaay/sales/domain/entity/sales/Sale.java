@@ -1,9 +1,7 @@
-package com.bahaaay.sales.domain.entity.sale;
+package com.bahaaay.sales.domain.entity.sales;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
-import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
-import com.bahaaay.common.domain.valueobject.identifiers.SaleTransactionId;
 import com.bahaaay.sales.domain.entity.product_ref.ProductRef;
 
 import java.math.BigDecimal;
@@ -11,7 +9,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Sale Aggregate Root.

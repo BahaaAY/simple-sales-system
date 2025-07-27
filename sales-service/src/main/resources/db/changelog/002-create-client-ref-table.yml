@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-client-ref-table
+      author: BahaaAY
+      changes:
+        - createTable:
+            tableName: client_ref
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mobile_number
+                  type: varchar(20)
+                  constraints:
+                    nullable: false

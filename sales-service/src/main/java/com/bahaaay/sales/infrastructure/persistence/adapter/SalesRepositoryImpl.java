@@ -1,10 +1,13 @@
 package com.bahaaay.sales.infrastructure.persistence.adapter;
 
+import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
 import com.bahaaay.sales.domain.entity.sales.Sale;
 import com.bahaaay.sales.domain.repository.SalesRepository;
 import com.bahaaay.sales.infrastructure.persistence.mapper.sales.SalesPersistenceMapper;
 import com.bahaaay.sales.infrastructure.persistence.repository.sale.SalesJpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class SalesRepositoryImpl implements SalesRepository {
@@ -23,6 +26,12 @@ public class SalesRepositoryImpl implements SalesRepository {
         return salesPersistenceMapper.saleJpaEntityToSale(
                 salesJpaRepository.save(salesPersistenceMapper.saleToSaleJpaEntity(sale))
         );
+    }
+
+    @Override
+    public Optional<Sale> findById(SaleId id) {
+        return salesJpaRepository.findById(id.getValue())
+                .map(salesPersistenceMapper::saleJpaEntityToSale);
     }
 
 

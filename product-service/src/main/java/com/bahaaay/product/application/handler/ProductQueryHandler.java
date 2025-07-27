@@ -7,6 +7,7 @@ import com.bahaaay.product.domain.entity.Product;
 import com.bahaaay.product.domain.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class ProductQueryHandler {
      * @param id the UUID of the product to retrieve
      * @return ProductDTO containing product details
      */
+    @Transactional(readOnly = true)
     public ProductDTO handleGetById(UUID id) {
 
         Product product = productRepository.findById(ProductId.from(id))

@@ -9,6 +9,7 @@ import com.bahaaay.product.domain.repository.ProductRepository;
 import com.bahaaay.product.interfaces.messaging.publisher.ProductEventPublisher;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ProductCommandHandler {
@@ -25,6 +26,7 @@ public class ProductCommandHandler {
         this.productEventPublisher = productEventPublisher;
     }
 
+    @Transactional
     public ProductDTO handleCreate(CreateProductRequest request) {
 
         // create a new product entity from the request
@@ -40,6 +42,7 @@ public class ProductCommandHandler {
 
     }
 
+    @Transactional
     public ProductDTO handleUpdate(UpdateProductCommand updateProductCommand) {
         // Retrieve the product by ID
         Product product = productRepository.findById(updateProductCommand.productId()).orElseThrow(
@@ -60,6 +63,5 @@ public class ProductCommandHandler {
 
         return productDataMapper.productToProductDTO(product);
     }
-
 
 }

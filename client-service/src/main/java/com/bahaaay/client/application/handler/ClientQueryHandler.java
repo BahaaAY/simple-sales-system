@@ -5,6 +5,7 @@ import com.bahaaay.client.application.mapper.ClientDataMapper;
 import com.bahaaay.client.domain.repository.ClientRepository;
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class ClientQueryHandler {
      * @param clientId the UUID of the client to retrieve
      * @return ClientDTO containing client details
      */
+    @Transactional(readOnly = true)
     public ClientDTO handleGetById(UUID clientId) {
         return clientRepository.findById(ClientId.from(clientId))
                 .map(clientDataMapper::clientToClientDTO)

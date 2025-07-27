@@ -9,6 +9,7 @@ import com.bahaaay.sales.domain.entity.sales.Sale;
 import com.bahaaay.sales.domain.repository.SalesRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class SalesQueryHandler {
         this.salesRepository = salesRepository;
     }
 
+    @Transactional(readOnly = true)
     public SaleDTO handleGetById(SaleId from) {
         return salesDataMapper.saleToSaleDTO(
                 salesRepository.findById(from)
@@ -31,6 +33,7 @@ public class SalesQueryHandler {
         );
     }
 
+    @Transactional(readOnly = true)
     public PagedResult<SaleDTO> handleFetchSales(int page, int size, Optional<ClientId> clientId) {
 
         int offset = page * size;

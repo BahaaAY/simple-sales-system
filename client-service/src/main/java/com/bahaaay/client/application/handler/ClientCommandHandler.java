@@ -9,6 +9,7 @@ import com.bahaaay.client.domain.repository.ClientRepository;
 import com.bahaaay.client.interfaces.messaging.publisher.ClientEventPublisher;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ClientCommandHandler {
@@ -23,6 +24,7 @@ public class ClientCommandHandler {
         this.clientEventPublisher = clientEventPublisher;
     }
 
+    @Transactional
     public ClientDTO handleCreate(
             CreateClientRequest createClientRequest
     ) {
@@ -37,6 +39,7 @@ public class ClientCommandHandler {
 
     }
 
+    @Transactional
     public ClientDTO handleUpdate(UpdateClientCommand updateClientCommand) {
         Client client = clientRepository.findById(updateClientCommand.clientId())
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));

@@ -17,6 +17,7 @@ import com.bahaaay.sales.domain.repository.ProductRefRepository;
 import com.bahaaay.sales.domain.repository.SalesRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class SalesCommandHandler {
         this.salesDataMapper = salesDataMapper;
     }
 
-
+    @Transactional
     public SaleDTO handleCreateSale(CreateSaleRequest request) {
 
         //load products ids
@@ -100,6 +101,7 @@ public class SalesCommandHandler {
         return salesDataMapper.saleToSaleDTO(savedSale);
     }
 
+    @Transactional
     public SaleDTO handleUpdateSaleTransactions(UpdateSaleTransactionsCommand updateSaleTransactionsCommand) {
         Sale sale = salesRepository.findById(
                 updateSaleTransactionsCommand.saleId()

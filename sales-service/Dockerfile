@@ -1,5 +1,5 @@
 # ---------- 1) Build Stage ----------
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-22 AS build
 WORKDIR /workspace
 
 # Copy root pom and all module pom.xml files for dependency resolution

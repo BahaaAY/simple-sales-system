@@ -2,9 +2,9 @@ package com.bahaaay.sales.interfaces.rest;
 
 
 import com.bahaaay.common.application.dto.PagedResult;
-import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.sales.application.SalesApplicationService;
 import com.bahaaay.sales.application.dto.SaleDTO;
+import com.bahaaay.sales.application.dto.SaleTransactionLogDTO;
 import com.bahaaay.sales.application.dto.create.CreateSaleRequest;
 import com.bahaaay.sales.application.dto.update.UpdateSaleTransactionsRequest;
 import jakarta.validation.Valid;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,5 +62,10 @@ public class SalesController {
     ) {
         SaleDTO updatedSale = salesApplicationService.updateSaleTransactions(request, id);
         return ResponseEntity.ok(updatedSale);
+    }
+
+    @GetMapping("/{id}/logs")
+    public ResponseEntity<List<SaleTransactionLogDTO>> getSaleLogs(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(salesApplicationService.getSalesTransactionLogs(id));
     }
 }

@@ -66,5 +66,10 @@ public class SalesRepositoryImpl implements SalesRepository {
         return salesJpaRepository.countByClientId(clientId.getValue());
     }
 
+    @Override
+    public boolean existsById(SaleId saleId) {
+        return salesJpaRepository.existsById(saleId.getValue());
+    }
+
 
 }

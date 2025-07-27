@@ -21,4 +21,9 @@ public interface SalesRepository {
      */
     List<Sale> findByClientId(ClientId clientId, int offset, int limit);
     long countByClientId(ClientId clientId);
+
+    /**
+     * Check if a sale exists by its ID
+     */
+    boolean existsById(SaleId saleId);
 }

@@ -6,6 +6,8 @@ import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.mapper.SalesDataMapper;
 import com.bahaaay.sales.domain.entity.sales.Sale;
+import com.bahaaay.sales.domain.entity.sales.SaleTransactionUpdateLog;
+import com.bahaaay.sales.domain.repository.SaleTransactionUpdateLogRepository;
 import com.bahaaay.sales.domain.repository.SalesRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -20,9 +22,12 @@ public class SalesQueryHandler {
 
     private final SalesRepository salesRepository;
 
-    public SalesQueryHandler(SalesDataMapper salesDataMapper, SalesRepository salesRepository) {
+    private final SaleTransactionUpdateLogRepository saleTransactionUpdateLogRepository;
+
+    public SalesQueryHandler(SalesDataMapper salesDataMapper, SalesRepository salesRepository, SaleTransactionUpdateLogRepository saleTransactionUpdateLogRepository) {
         this.salesDataMapper = salesDataMapper;
         this.salesRepository = salesRepository;
+        this.saleTransactionUpdateLogRepository = saleTransactionUpdateLogRepository;
     }
 
     @Transactional(readOnly = true)
@@ -52,5 +57,16 @@ public class SalesQueryHandler {
         int totalPages = (int) Math.ceil((double) total / size);
 
         return new PagedResult<>(salesList.stream().map(salesDataMapper::saleToSaleDTO).toList(), page, size, total, totalPages);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SaleTransactionUpdateLog> handleFetchLogsBySaleId(SaleId saleId) {
+        if (saleId == null) {
+            throw new IllegalArgumentException("Sale ID cannot be null");
+        }
+        if (!salesRepository.existsById(saleId)) {
+            throw new EntityNotFoundException("Sale not found with id: " + saleId);
+        }
+        return saleTransactionUpdateLogRepository.findBySaleId(saleId);
     }
 }

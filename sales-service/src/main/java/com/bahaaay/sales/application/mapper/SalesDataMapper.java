@@ -2,8 +2,10 @@ package com.bahaaay.sales.application.mapper;
 
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.dto.SaleTransactionDTO;
+import com.bahaaay.sales.application.dto.SaleTransactionLogDTO;
 import com.bahaaay.sales.domain.entity.sales.Sale;
 import com.bahaaay.sales.domain.entity.sales.SaleTransaction;
+import com.bahaaay.sales.domain.entity.sales.SaleTransactionUpdateLog;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,6 +40,21 @@ public class SalesDataMapper {
                 .price(saleTransaction.getPrice())
                 .createdAt(saleTransaction.getCreatedAt())
                 .updatedAt(saleTransaction.getUpdatedAt())
+                .build();
+    }
+
+    public SaleTransactionLogDTO saleTransactionUpdateLogToSaleTransactionLogDTO(SaleTransactionUpdateLog saleTransactionUpdateLog) {
+        if (saleTransactionUpdateLog == null) {
+            return null;
+        }
+
+        return SaleTransactionLogDTO.builder()
+                .id(saleTransactionUpdateLog.getId().getValue())
+                .saleId(saleTransactionUpdateLog.getSaleId().getValue())
+                .transactionId(saleTransactionUpdateLog.getTransactionId().getValue())
+                .oldQuantity(saleTransactionUpdateLog.getOldQuantity())
+                .newQuantity(saleTransactionUpdateLog.getNewQuantity())
+                .updatedAt(saleTransactionUpdateLog.getUpdatedAt())
                 .build();
     }
 }

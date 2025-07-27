@@ -25,11 +25,9 @@ spring:
       ddl-auto: none #using Liquibase for schema management
     properties:
       hibernate:
-        default_schema: product_service
         format_sql: true
         show_sql: true
 
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/changelog-master.yml
-    default-schema: product_service

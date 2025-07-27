@@ -1,14 +1,19 @@
 package com.bahaaay.sales.interfaces.rest;
 
 
+import com.bahaaay.common.application.dto.PagedResult;
+import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.sales.application.SalesApplicationService;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.dto.create.CreateSaleRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -32,5 +37,19 @@ public class SalesController {
     public ResponseEntity<SaleDTO> getSaleById(@PathVariable("id") UUID id) {
         SaleDTO sale = salesApplicationService.getSaleById(id);
         return ResponseEntity.ok(sale);
+    }
+
+    @GetMapping
+    public ResponseEntity<PagedResult<SaleDTO>> list(
+            @Valid @PositiveOrZero @RequestParam(name = "page", defaultValue = "0") int page,
+            @Valid @Positive @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "client", required = false) UUID clientId
+    ) {
+        PagedResult<SaleDTO> result = salesApplicationService.fetchSales(
+                page,
+                size,
+                Optional.ofNullable(clientId)
+        );
+        return ResponseEntity.ok(result);
     }
 }

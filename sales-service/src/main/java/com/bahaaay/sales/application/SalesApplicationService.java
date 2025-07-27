@@ -1,5 +1,7 @@
 package com.bahaaay.sales.application;
 
+import com.bahaaay.common.application.dto.PagedResult;
+import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.dto.create.CreateSaleRequest;
@@ -8,6 +10,7 @@ import com.bahaaay.sales.application.handler.SalesQueryHandler;
 import com.bahaaay.sales.application.mapper.SalesDataMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,5 +33,13 @@ public class SalesApplicationService {
 
     public SaleDTO getSaleById(UUID id) {
         return salesQueryHandler.handleGetById(SaleId.from(id));
+    }
+
+    public PagedResult<SaleDTO> fetchSales(int page, int size, Optional<UUID> clientId) {
+        return salesQueryHandler.handleFetchSales(
+                page,
+                size,
+                clientId.map(ClientId::from)
+        );
     }
 }

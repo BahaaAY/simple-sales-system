@@ -6,6 +6,7 @@ import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.sales.application.SalesApplicationService;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.dto.create.CreateSaleRequest;
+import com.bahaaay.sales.application.dto.update.UpdateSaleTransactionsRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -51,5 +52,14 @@ public class SalesController {
                 Optional.ofNullable(clientId)
         );
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/{id}/transactions")
+    public ResponseEntity<SaleDTO> addTransactionToSale(
+            @PathVariable("id") UUID id,
+            @RequestBody @Valid UpdateSaleTransactionsRequest request
+    ) {
+        SaleDTO updatedSale = salesApplicationService.updateSaleTransactions(request, id);
+        return ResponseEntity.ok(updatedSale);
     }
 }

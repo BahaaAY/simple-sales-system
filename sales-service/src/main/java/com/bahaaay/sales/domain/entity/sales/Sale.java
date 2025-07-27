@@ -2,6 +2,8 @@ package com.bahaaay.sales.domain.entity.sales;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.common.domain.valueobject.identifiers.SaleId;
+import com.bahaaay.common.domain.valueobject.identifiers.SaleTransactionId;
+import com.bahaaay.sales.domain.dto.TransactionQuantityUpdate;
 import com.bahaaay.sales.domain.entity.product_ref.ProductRef;
 
 import java.math.BigDecimal;
@@ -68,6 +70,18 @@ public class Sale {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public TransactionQuantityUpdate updateTransactionQuantity(SaleTransactionId transactionId, int newQuantity) {
+        SaleTransaction transaction = transactions.stream()
+                .filter(t -> t.getId().equals(transactionId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
+        int currentQuantity = transaction.getQuantity();
+        transaction.updateQuantity(newQuantity);
+        this.updatedAt = Instant.now();
+
+        return new TransactionQuantityUpdate(transactionId, currentQuantity, newQuantity);
+    }
+
     public SaleId getId() {
         return id;
     }
@@ -91,4 +105,6 @@ public class Sale {
     public Instant getUpdatedAt() {
         return updatedAt;
     }
+
+
 }

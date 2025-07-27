@@ -48,6 +48,14 @@ public class SaleTransaction {
             throw new IllegalArgumentException("price ≥ 0");
     }
 
+    public void updateQuantity(int newQuantity) {
+        if (newQuantity < 0) {
+            throw new IllegalArgumentException("quantity must be ≥ 0");
+        }
+        this.quantity = newQuantity;
+        this.updatedAt = Instant.now();
+    }
+
     public SaleTransactionId getId() {
         return id;
     }

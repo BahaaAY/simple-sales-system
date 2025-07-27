@@ -2,9 +2,13 @@ package com.bahaaay.sales.application.handler;
 
 import com.bahaaay.common.domain.valueobject.identifiers.ClientId;
 import com.bahaaay.common.domain.valueobject.identifiers.ProductId;
+import com.bahaaay.common.domain.valueobject.identifiers.SaleTransactionId;
 import com.bahaaay.sales.application.dto.SaleDTO;
 import com.bahaaay.sales.application.dto.create.CreateSaleRequest;
+import com.bahaaay.sales.application.dto.update.UpdateSaleTransactionRequest;
+import com.bahaaay.sales.application.dto.update.UpdateSaleTransactionsCommand;
 import com.bahaaay.sales.application.mapper.SalesDataMapper;
+import com.bahaaay.sales.domain.dto.TransactionQuantityUpdate;
 import com.bahaaay.sales.domain.entity.client_ref.ClientRef;
 import com.bahaaay.sales.domain.entity.product_ref.ProductRef;
 import com.bahaaay.sales.domain.entity.sales.Sale;
@@ -93,6 +97,28 @@ public class SalesCommandHandler {
 
         Sale savedSale = salesRepository.save(sale);
 
+        return salesDataMapper.saleToSaleDTO(savedSale);
+    }
+
+    public SaleDTO handleUpdateSaleTransactions(UpdateSaleTransactionsCommand updateSaleTransactionsCommand) {
+        Sale sale = salesRepository.findById(
+                updateSaleTransactionsCommand.saleId()
+        ).orElseThrow(() -> new EntityNotFoundException(
+                "Sale not found: " + updateSaleTransactionsCommand.saleId()
+        ));
+        // Batch‐update all lines
+        for (UpdateSaleTransactionRequest txReq : updateSaleTransactionsCommand.transactionRequestList()) {
+            // update transaction quantity from parent sale
+            TransactionQuantityUpdate change = sale.updateTransactionQuantity(
+                    SaleTransactionId.from(txReq.transactionId()),
+                    txReq.newQuantity()
+            );
+            //TODO save log
+        }
+        // save the sale
+        Sale savedSale = salesRepository.save(sale);
+
+        // return the updated sale
         return salesDataMapper.saleToSaleDTO(savedSale);
     }
 }

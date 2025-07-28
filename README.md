@@ -7,28 +7,29 @@
 ## Table of Contents
 
 - [Simple Sales System – API \& Architecture Documentation](#simple-sales-system--api--architecture-documentation)
-    - [Table of Contents](#table-of-contents)
-    - [System Overview](#system-overview)
-    - [High-Level Architecture](#high-level-architecture)
-    - [Service Catalogue](#service-catalogue)
-    - [Synchronous REST APIs](#synchronous-rest-apis)
-        - [API Gateway Route Table](#api-gateway-route-table)
-        - [Client Service Endpoints](#client-service-endpoints)
-        - [Product Service Endpoints](#product-service-endpoints)
-        - [Sales Service Endpoints](#sales-service-endpoints)
-    - [Asynchronous Events (Kafka / Avro)](#asynchronous-events-kafka--avro)
-        - [Topic Naming Convention](#topic-naming-convention)
-        - [Schema Registry](#schema-registry)
-        - [Serialization Strategy](#serialization-strategy)
-        - [Event Flow Example – Client Created](#event-flow-example--client-created)
-    - [Data Persistence \& Migrations](#data-persistence--migrations)
-    - [Domain \& Design Patterns](#domain--design-patterns)
-        - [Domain-Driven Design (DDD)](#domain-driven-design-ddd)
-        - [Kafka Integration with DDD](#kafka-integration-with-ddd)
-        - [Hexagonal Architecture](#hexagonal-architecture)
-        - [CQRS](#cqrs)
-    - [Build \& Run](#build--run)
-    - [Future Enhancements](#future-enhancements)
+  - [Table of Contents](#table-of-contents)
+  - [System Overview](#system-overview)
+  - [High-Level Architecture](#high-level-architecture)
+  - [Service Catalogue](#service-catalogue)
+  - [Synchronous REST APIs](#synchronous-rest-apis)
+    - [API Gateway Route Table](#api-gateway-route-table)
+    - [Client Service Endpoints](#client-service-endpoints)
+    - [Product Service Endpoints](#product-service-endpoints)
+    - [Sales Service Endpoints](#sales-service-endpoints)
+  - [Asynchronous Events (Kafka / Avro)](#asynchronous-events-kafka--avro)
+    - [Topic Naming Convention](#topic-naming-convention)
+    - [Schema Registry](#schema-registry)
+    - [Serialization Strategy](#serialization-strategy)
+    - [Event Flow Example – Client Created](#event-flow-example--client-created)
+  - [Data Persistence \& Migrations](#data-persistence--migrations)
+  - [Domain \& Design Patterns](#domain--design-patterns)
+    - [Domain-Driven Design (DDD)](#domain-driven-design-ddd)
+    - [Kafka Integration with DDD](#kafka-integration-with-ddd)
+    - [Hexagonal Architecture](#hexagonal-architecture)
+    - [CQRS](#cqrs)
+  - [Class Diagram (UML)](#class-diagram-uml)
+  - [Build \& Run](#build--run)
+  - [Future Enhancements](#future-enhancements)
 
 ---
 
@@ -47,19 +48,11 @@ The **Simple Sales System** is a microservice application demonstrating an enter
 
 ## High-Level Architecture
 
-```
-[Client] ← REST → [API Gateway] ──→ [client-service]
-                       ↘︎          └─→ [product-service]
-                        ↘︎              └─→ [sales-service]
+<img src="high-level-system-design.svg" alt="System High Level Design" width="600" />
 
-All services ↔ Kafka ↔ Schema Registry
-```
-
-- **API Gateway:** Handles routing, basic authentication, and API versioning.
+- **API Gateway:** Handles routing.
 - **Services:** Publish and consume Avro events on Kafka topics.
 - **Databases:** PostgreSQL databases per service.
-
-> **Tip:** Use Docker Compose for streamlined local development.
 
 ---
 
@@ -182,85 +175,9 @@ CQRS provides explicit separation between read and write operations, facilitatin
 
 ## Class Diagram (UML)
 
-```plantuml
-@startuml
+<img src="class-diagram.svg" alt="Class Diagram" width="600" />
 
-' Client Service Entities
-package "Client Service" {
-  class ClientJpaEntity {
-    +UUID id
-    +String name
-    +String lastName
-    +String mobileNumber
-    +Instant createdAt
-    +Instant updatedAt
-  }
-}
-
-' Product Service Entities
-package "Product Service" {
-  class ProductJpaEntity {
-    +UUID id
-    +String name
-    +String description
-    +String category
-    +BigDecimal price
-    +Instant createdAt
-    +Instant updatedAt
-  }
-}
-
-' Sales Service Entities
-package "Sales Service" {
-  class ClientRefJpaEntity {
-    +UUID id
-    +String fullName
-    +String mobileNumber
-  }
-  class ProductRefJpaEntity {
-    +UUID id
-    +String name
-    +BigDecimal price
-  }
-  class SaleJpaEntity {
-    +UUID id
-    +UUID clientId
-    +String seller
-    +Instant createdAt
-    +Instant updatedAt
-    +BigDecimal total
-    +List<SaleTransactionJpaEntity> transactions
-  }
-  class SaleTransactionJpaEntity {
-    +UUID id
-    +UUID saleId
-    +UUID productId
-    +String productName
-    +int quantity
-    +BigDecimal price
-    +Instant createdAt
-    +Instant updatedAt
-  }
-  class SaleTransactionUpdateLogJpaEntity {
-    +UUID id
-    +UUID transactionId
-    +UUID saleId
-    +int oldQuantity
-    +int newQuantity
-    +Instant updatedAt
-  }
-}
-
-' Relationships
-SaleJpaEntity "1" o-- "*" SaleTransactionJpaEntity : transactions
-SaleTransactionJpaEntity --> SaleJpaEntity : sale
-SaleTransactionUpdateLogJpaEntity ..> SaleTransactionJpaEntity : transactionId
-SaleTransactionUpdateLogJpaEntity ..> SaleJpaEntity : saleId
-SaleJpaEntity ..> ClientJpaEntity : clientId
-SaleTransactionJpaEntity ..> ProductJpaEntity : productId
-
-@enduml
-
+---
 
 ## Build & Run
 

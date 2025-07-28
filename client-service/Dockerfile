@@ -1,37 +1,41 @@
-# ---------- 1) Build Stage ----------
-FROM maven:3.9-eclipse-temurin-22 AS build
-WORKDIR /workspace
+# syntax=docker/dockerfile:1.3
+FROM maven:3.9.6-eclipse-temurin-22 AS build
+WORKDIR /build
 
-# Copy root and module pom.xml files for dependency resolution
+# Step 1: Copy all required POMs first
 COPY pom.xml .
-COPY client-service/pom.xml client-service/pom.xml
-COPY api-gateway/pom.xml api-gateway/pom.xml
-COPY product-service/pom.xml product-service/pom.xml
-COPY sales-service/pom.xml sales-service/pom.xml
 COPY common/pom.xml common/pom.xml
+COPY client-service/pom.xml client-service/pom.xml
 
-# Preload Maven dependencies
-RUN mvn -B dependency:go-offline
+# Step 2: Install the root aggregator POM to local .m2
+RUN --mount=type=cache,id=m2,target=/root/.m2 \
+    mvn install -N -B
 
-# Copy full source code for required modules
-COPY client-service/ client-service/
-COPY api-gateway/ api-gateway/
-COPY product-service/ product-service/
-COPY sales-service/ sales-service/
-COPY common/ common/
+# Step 3: Install common module
+COPY common/src/ common/src/
+RUN --mount=type=cache,id=m2,target=/root/.m2 \
+    mvn -f common/pom.xml clean install -B -DskipTests
 
-# Build only client-service and required dependencies
-RUN mvn -B -pl client-service -am -DskipTests package
+# Step 4: Preload client-service dependencies
+RUN --mount=type=cache,id=m2,target=/root/.m2 \
+    mvn -f client-service/pom.xml dependency:go-offline -B
 
-# ---------- 2) Runtime Stage ----------
-FROM eclipse-temurin:21-jre
+# Step 5: Copy client-service code and build
+COPY client-service/src/ client-service/src/
+RUN --mount=type=cache,id=m2,target=/root/.m2 \
+    mvn -f client-service/pom.xml clean package -B -DskipTests
+
+########################################
+## Runtime Stage                      ##
+########################################
+FROM eclipse-temurin:22-jdk-alpine
 WORKDIR /app
 
-# Copy the final JAR from the build stage
-COPY --from=build /workspace/client-service/target/*.jar app.jar
+# Copy only the built JAR
+COPY --from=build /build/client-service/target/client-service-*.jar client-service.jar
 
-# Expose the application port
+# Expose the port
 EXPOSE 8182
 
-# Start the service
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "client-service.jar"]

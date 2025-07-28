@@ -7,7 +7,9 @@
         <groupId>com.bahaaay</groupId>
         <artifactId>simple-sales-system</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+    <packaging>jar</packaging>
 
     <artifactId>api-gateway</artifactId>
 
@@ -45,5 +47,22 @@
         <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

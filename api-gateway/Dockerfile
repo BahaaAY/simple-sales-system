@@ -1,37 +1,37 @@
-# ---------- 1) Build Stage ----------
-FROM maven:3.9-eclipse-temurin-22 AS build
-WORKDIR /workspace
+########################################
+## Build Stage                        ##
+########################################
+FROM maven:3.9.6-eclipse-temurin-22 AS build
+WORKDIR /build
 
-# Copy root pom.xml and module pom.xmls for caching dependencies
+# Step 1: Copy required POM files
 COPY pom.xml .
 COPY api-gateway/pom.xml api-gateway/pom.xml
-COPY client-service/pom.xml client-service/pom.xml
-COPY product-service/pom.xml product-service/pom.xml
-COPY sales-service/pom.xml sales-service/pom.xml
 COPY common/pom.xml common/pom.xml
 
-# Preload dependencies
-RUN mvn -B dependency:go-offline
+# Step 2: Preload dependencies
+RUN --mount=type=cache,id=m2,target=/root/.m2 \
+    mvn -f api-gateway/pom.xml dependency:go-offline -B
 
-# Copy full module source code
-COPY api-gateway/ api-gateway/
-COPY client-service/ client-service/
-COPY product-service/ product-service/
-COPY sales-service/ sales-service/
-COPY common/ common/
+# Step 3: Copy only relevant source code
+COPY api-gateway/src/ api-gateway/src/
+COPY common/src/ common/src/
 
-# Build the api-gateway module and its dependencies
-RUN mvn -B -pl api-gateway -am -DskipTests package
+# Step 4: Build the JAR
+RUN --mount=type=cache,id=m2,target=/root/.m2 \
+    mvn -f api-gateway/pom.xml clean package -B -DskipTests
 
-# ---------- 2) Runtime Stage ----------
-FROM eclipse-temurin:21-jre
+########################################
+## Runtime Stage                      ##
+########################################
+FROM eclipse-temurin:22-jdk-alpine
 WORKDIR /app
 
-# Copy the built JAR from the build stage
-COPY --from=build /workspace/api-gateway/target/*.jar app.jar
+# Copy only the built JAR
+COPY --from=build /build/api-gateway/target/api-gateway-*.jar ./api-gateway.jar
 
-# Expose the application port
+# Set port
 EXPOSE 8180
 
 # Run the app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "api-gateway.jar"]

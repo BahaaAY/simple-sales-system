@@ -1,7 +1,4 @@
 # Simple Sales System – API & Architecture Documentation
-
-> **Version:** 1.0 · **Last updated:** 27 Jul 2025
-
 ---
 
 ## Table of Contents
@@ -95,7 +92,7 @@ The **Simple Sales System** is a microservice application demonstrating an enter
 
 | Method | Endpoint | Description          | Request Body           | Response                |
 | ------ | -------- | -------------------- | ---------------------- | ----------------------- |
-| POST   | `/`      | Create a product     | `CreateProductRequest` | `200 OK` → `ProductDTO` |
+| POST   | `/`      | Create a product     | `CreateProductRequest` | `201 Created` → `ProductDTO` |
 | GET    | `/{id}`  | Get product by ID    | —                      | `200 OK` → `ProductDTO` |
 | PUT    | `/{id}`  | Update product by ID | `UpdateProductRequest` | `200 OK` → `ProductDTO` |
 
